@@ -44,9 +44,11 @@ dieses Testset geprüft.
 
 ## In Langdock installieren
 
-Den Ordner `skills/big-if-true-de` als Skill hochladen (gezippt, falls
-Langdock eine Datei verlangt). Für die Berichtsseite braucht der Skill
-Code-Ausführung; ohne sie gibt es einen Textbericht.
+Den *Inhalt* von `skills/big-if-true-de` zippen, sodass `SKILL.md` direkt
+im Wurzelverzeichnis des Archivs liegt, neben `assets/`, `references/` und
+`scripts/` (nicht in einem übergeordneten Ordner), und das Zip als Skill
+importieren. Für die Berichtsseite braucht der Skill Code-Ausführung; ohne
+sie gibt es einen Textbericht.
 
 ## Fragen und Fehler
 
