@@ -250,9 +250,11 @@ Textes.
 eine Möglichkeit, eine HTML-Seite zu zeigen (ein Artefakt, ein Canvas
 oder eine gespeicherte Datei, die die Nutzerin öffnen kann), baue sie
 mit dem mitgelieferten Assembler. Die Seite enthält kein JavaScript:
-Der Assembler schreibt jedes Wort hinein, und Filter, Ansichten und
-Belegnotizen funktionieren mit reinem HTML und CSS. Deshalb wird sie
-auch in Umgebungen angezeigt, die Skripte blockieren, etwa in Langdock.
+Der Assembler schreibt jedes Wort hinein. Jede geprüfte Stelle trägt
+eine Fußnotenzahl, die zu Urteil, Begründung und Quellen der Aussage in
+einer nummerierten Liste unter dem Artikel führt, und jeder Eintrag
+führt zurück. Deshalb funktioniert sie auch in Umgebungen, die Skripte
+blockieren, etwa in Langdock.
 Füg ihr nie ein Skript hinzu, und liefere die Datei, die der Assembler
 geschrieben hat, unverändert.
 

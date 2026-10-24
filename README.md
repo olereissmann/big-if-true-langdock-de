@@ -24,14 +24,21 @@ mit JavaScript auf und bleibt dort leer.
 - **Deutsche Quellen ergänzt.** Die Recherche-Routen nennen zusätzlich
   Destatis, Bundestag, RKI, Handelsregister, deutsche Gerichte und
   Faktenchecker im deutschsprachigen Raum.
-- **Die Berichtsseite enthält kein JavaScript.** `scripts/assemble.py`
-  schreibt die ganze Seite als reines HTML, und die interaktiven Teile
-  laufen mit HTML und CSS:
-  - ein Klick auf eine markierte Stelle öffnet ihre Belegnotiz
-  - die Filter nach Urteil und der Wechsel Artikel / Aussagen sind Radio-Buttons
+- **Die Berichtsseite ist reines HTML mit Fußnoten.** `scripts/assemble.py`
+  schreibt die ganze Seite fertig als HTML, ohne JavaScript und ohne
+  interaktives CSS. Die einzige Interaktion ist, Links zu folgen:
+  - jede geprüfte Stelle im Artikel ist markiert und trägt eine
+    Fußnotenzahl; sie führt zu Urteil, Begründung und Quellen der Aussage
+    in einer nummerierten Liste unter dem Artikel
+  - jeder Eintrag dort führt zurück zu seiner Stelle
+  - der farbige Balken oben und die Zeile „Nachprüfen“ führen direkt zu
+    den Aussagen
   - der Export-Bereich unten zeigt Markdown, CSV und JSON in Textfeldern
     zum Kopieren, dazu Download-Links, wo die Anzeige sie zulässt
-  - Kopier-Buttons und Hover-Effekte fallen weg, weil sie ein Skript brauchen
+  - weggefallen, weil sie ein Skript oder interaktives CSS brauchen: die
+    Filter nach Urteil, der Wechsel Artikel / Aussagen, die aufklappenden
+    Notizen, die Kopier-Buttons und die Hover-Effekte
+  - die Seite bleibt lesbar, auch wenn eine Anzeige ihre Styles entfernt
 - **Der Footer** nennt diese Fassung neben Verso.
 - **Dokumentkommentare** sind „von einem KI-Assistenten gepostet“ statt
   „von Claude“, weil in Langdock auch andere Modelle laufen.
