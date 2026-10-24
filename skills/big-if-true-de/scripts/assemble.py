@@ -488,7 +488,11 @@ def render_page(tpl, d, paras):
         for si, seg in enumerate(para):
             t, ids = seg[0], seg[1]
             if ids:
-                inner = f'<mark class="{worst(ids)}">{_e(t)}</mark>'
+                w = worst(ids)
+                target = min(i for i in ids if by_id[i][1] == w)
+                inner = (f'<a class="mk" href="#c{target}" '
+                         f'title="{_e(PAGE["fn_title"].format(n=target, verdict=PAGE["verdict"][w]))}">'
+                         f'<mark class="{w}">{_e(t)}</mark></a>')
                 ends = [i for i in ids if last_seg[i] == (pi, si)]
                 if ends:
                     inner += '<sup class="fn">' + ",".join(
