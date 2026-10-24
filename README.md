@@ -1,40 +1,58 @@
-# Big If True, deutsche Fassung ohne JavaScript
+# Big If True, deutsche Fassung für Langdock
 
 Dies ist ein Fork von [Verso-Lab/big-if-true-plugin](https://github.com/Verso-Lab/big-if-true-plugin),
-dem Faktencheck-Skill von [Verso](https://verso.ink). Methode, Skripte und
-Prüfschritte stammen von Verso. Zwei Dinge sind anders:
+dem Faktencheck-Skill von [Verso](https://verso.ink/), übersetzt und
+angepasst von Ole Reissmann für [THEFUTURE](https://olereissmann.com/newsletter/),
+einen Newsletter über KI und Journalismus. Die Methode und ihre Regeln
+stammen von Verso.
 
-**1. Alles auf Deutsch.** Die Anleitung (`SKILL.md`), die
-Extraktionsregeln, die Recherche-Routen, die Berichtsseite und die
-Exporte sind übersetzt. Die Routen nennen zusätzlich deutsche Quellen
-(Destatis, Bundestag, RKI, Handelsregister, Faktenchecker im
-deutschsprachigen Raum). Technische Werte bleiben englisch, weil die
-Skripte sie lesen: die Urteile `r`, `c`, `s`, die Markierungen `[fact]`
-und `[attribution]`, die Feldnamen in `check.json`. Die Urteile heißen
-auf der Seite Nachprüfen, Nicht verifizierbar und Belegt.
+## Warum es diesen Fork gibt
 
-**2. Die Berichtsseite enthält kein JavaScript.** Manche KI-Plattformen,
-darunter Langdock, blockieren aus Sicherheitsgründen Skripte in
-HTML-Seiten. Die Originalseite baut sich mit JavaScript auf und bleibt
-dort leer. Hier schreibt `scripts/assemble.py` die ganze Seite als
-reines HTML, und die interaktiven Teile laufen mit HTML und CSS:
+Zwei Gründe: Der Skill soll auf Deutsch arbeiten, und er soll in Langdock
+laufen. Manche KI-Plattformen, darunter Langdock, blockieren aus
+Sicherheitsgründen JavaScript in HTML-Seiten. Die Originalseite baut sich
+mit JavaScript auf und bleibt dort leer.
 
-- ein Klick auf eine markierte Stelle öffnet ihre Belegnotiz
-- die Filter nach Urteil und der Wechsel Artikel / Aussagen sind Radio-Buttons
-- der Export-Bereich zeigt Markdown, CSV und JSON in Textfeldern zum
-  Kopieren, dazu Download-Links, wo die Anzeige sie zulässt
-- die Kopier-Buttons fallen weg, weil die Zwischenablage ein Skript braucht
+## Was geändert wurde
+
+- **Alles auf Deutsch.** Die Anleitung (`SKILL.md`), die
+  Extraktionsregeln, die Recherche-Routen, die Berichtsseite und die
+  Exporte sind übersetzt. Die Urteile heißen Nachprüfen, Nicht
+  verifizierbar und Belegt. Technische Werte bleiben englisch, weil die
+  Skripte sie lesen: die Urteile `r`, `c`, `s`, die Markierungen `[fact]`
+  und `[attribution]`, die Feldnamen in `check.json`.
+- **Deutsche Quellen ergänzt.** Die Recherche-Routen nennen zusätzlich
+  Destatis, Bundestag, RKI, Handelsregister, deutsche Gerichte und
+  Faktenchecker im deutschsprachigen Raum.
+- **Die Berichtsseite enthält kein JavaScript.** `scripts/assemble.py`
+  schreibt die ganze Seite als reines HTML, und die interaktiven Teile
+  laufen mit HTML und CSS:
+  - ein Klick auf eine markierte Stelle öffnet ihre Belegnotiz
+  - die Filter nach Urteil und der Wechsel Artikel / Aussagen sind Radio-Buttons
+  - der Export-Bereich unten zeigt Markdown, CSV und JSON in Textfeldern
+    zum Kopieren, dazu Download-Links, wo die Anzeige sie zulässt
+  - Kopier-Buttons und Hover-Effekte fallen weg, weil sie ein Skript brauchen
+- **Der Footer** nennt diese Fassung neben Verso.
+- **Dokumentkommentare** sind „von einem KI-Assistenten gepostet“ statt
+  „von Claude“, weil in Langdock auch andere Modelle laufen.
 
 Die Seite funktioniert weiterhin auch in Claude, Codex und jedem Browser.
-
-**In Langdock installieren:** den Ordner `skills/big-if-true-de` als Skill
-hochladen (gezippt, falls Langdock eine Datei verlangt). Für die
-Berichtsseite braucht der Skill Code-Ausführung; ohne sie gibt es einen
-Textbericht.
 
 Hinweis: Verso hat die Methode an einem Testset gemessen, die englischen
 Anweisungen sind darauf abgestimmt. Die Übersetzung ist nicht gegen
 dieses Testset geprüft.
+
+## In Langdock installieren
+
+Den Ordner `skills/big-if-true-de` als Skill hochladen (gezippt, falls
+Langdock eine Datei verlangt). Für die Berichtsseite braucht der Skill
+Code-Ausführung; ohne sie gibt es einen Textbericht.
+
+## Fragen und Fehler
+
+Probleme mit dieser Fassung bitte als Issue in diesem Repository melden,
+nicht bei Verso. Probleme mit der Methode selbst meldet man am besten
+Verso.
 
 Lizenz: MIT, wie das Original. Die Methode und alle Verdienste daran
 gehören Verso.
@@ -42,6 +60,9 @@ gehören Verso.
 ---
 
 ## The original README
+
+*Darunter steht Versos README, unverändert. Die Installationslinks darin
+richten die englische Originalfassung ein, nicht diese.*
 
 A fact-checking plugin for Claude by [Verso](https://verso.ink). Give it an
 article, a draft, a newsletter or a press release: it finds every checkable
