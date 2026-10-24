@@ -1,23 +1,6 @@
 ---
 name: big-if-true-de
-description: >-
-  Gründlicher Faktencheck, Aussage für Aussage, für jeden Artikel, Entwurf,
-  Newsletter, Post, jede Pressemitteilung und jedes Dokument, in jeder
-  Sprache: jede prüfbare Tatsachenaussage herausziehen, jede an
-  Primärquellen und unabhängigen Quellen prüfen (amtliche Daten-APIs,
-  Pflichtveröffentlichungen, Transkripte, Archive, das Live-Web und den
-  Browser, wenn Seiten den Abruf blockieren) und abgestufte Urteile mit
-  Belegen liefern. Bericht auf Deutsch. Einsetzen, wenn jemand etwas
-  faktenchecken möchte, Aussagen, Statistiken oder Zahlen vor dem Zitieren
-  oder Veröffentlichen prüfen will, wissen möchte, ob ein Text stimmt,
-  fragt „stimmt das?“, einen Entwurf vor der Veröffentlichung auf
-  Richtigkeit durchsehen lassen will, den eigenen Text oder den einer
-  Kollegin durchgehen möchte, weil etwas nicht stimmt oder die Zahlen
-  seltsam wirken, wissen will, ob ein Zitat, eine Studie oder ein
-  Social-Media-Post echt ist, oder einen Artikel teilt und wissen will,
-  ob er hält, auch wenn das Wort „Faktencheck“ nie fällt. Braucht
-  Websuche; Code-Ausführung baut die Berichtsseite und ruft die Daten ab
-  (ohne sie gibt es einen Textbericht).
+description: "Faktencheck Aussage für Aussage: prüft jede Aussage eines Artikels, Entwurfs oder Posts an Primärquellen und im Live-Web, mit Urteil und Belegen. Einsetzen bei Faktencheck, Prüfung von Zahlen oder Zitaten, „Stimmt das?“. Bericht auf Deutsch."
 metadata:
   version: "0.7.1-langdock-de"
 ---
