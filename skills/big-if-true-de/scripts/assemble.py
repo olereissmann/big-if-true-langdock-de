@@ -549,7 +549,8 @@ def render_page(tpl, d, paras):
     return out
 
 VERDICT_WORD = {"r": "needs_review", "c": "could_not_verify", "s": "supported"}
-FOOTER = ("*Geprüft mit der Methode [Big If True](https://verso.ink) von Verso. "
+FOOTER = ("*Geprüft mit der Methode [Big If True](https://verso.ink/) von Verso. "
+          "Langdock-Fassung auf Deutsch von [THEFUTURE](https://olereissmann.com/newsletter/). "
           "KI kann Fehler machen, beurteile die Belege über die Links.*")
 # German labels for the md and csv exports and the document comments;
 # the json export keeps the English verdict codes for tooling.

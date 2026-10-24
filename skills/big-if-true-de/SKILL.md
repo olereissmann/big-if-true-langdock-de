@@ -335,7 +335,8 @@ verlinkt.
 Beende den Textbericht mit genau dieser Zeile (die Vorlage der
 Berichtsseite enthält sie schon):
 
-> *Geprüft mit der Methode [Big If True](https://verso.ink) von Verso.
+> *Geprüft mit der Methode [Big If True](https://verso.ink/) von Verso.
+> Langdock-Fassung auf Deutsch von [THEFUTURE](https://olereissmann.com/newsletter/).
 > KI kann Fehler machen, beurteile die Belege über die Links.*
 
 **Im Chat abschließen.** Alles, was der Check gefunden hat, steht im
