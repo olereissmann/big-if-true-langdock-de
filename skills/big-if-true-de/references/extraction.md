@@ -19,6 +19,8 @@ in einer Zeile, ihr Zitat in der Zeile darunter, wörtlich aus dem Text
 kopiert:
 
 ```
+wire: dpa
+
 ## P3
 - [fact] Die Initiatoren gaben am Sonntag bekannt, genug Unterschriften zu haben.
   > gaben am Sonntag bekannt, dass sie genug Unterschriften haben
@@ -39,6 +41,15 @@ Extraktion ist billig, und in Durchgang 2 bedient eine gute Suche meist
 eine ganze Gruppe von Aussagen. Eine viel längere Liste kostet also nur
 etwas mehr Recherche. Lass beim Extrahieren nie eine Aussage weg, weil
 sie nebensächlich, offensichtlich oder teuer zu prüfen wirkt.
+
+**Beginne die Datei mit der Agenturzeile.** Die erste Zeile von
+claims.md sagt, ob der Text ganz oder teilweise Agenturmaterial ist:
+`wire: dpa` (oder `wire: dpa, Reuters`, die Agenturen, die er nennt)
+oder `wire: none`. Achte auf eine Ortsmarke wie „Berlin (dpa) -“, ein
+Kürzel wie „lb/dpa“, „mit Material von“, „Quelle: dpa“ oder einen Satz,
+der eine Agentur als Quelle der Meldung nennt. Halte fest, was der Text
+zeigt; rate nicht. Diese Zeile entscheidet später, welche Quellen als
+unabhängig zählen können.
 
 **Führe ein Ausschussprotokoll.** Wenn du einen Satz als nicht
 extrahierbar übergehst, notiere ihn in der Aussagendatei mit einem

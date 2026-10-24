@@ -3,51 +3,91 @@
 Dies ist ein Fork von [Verso-Lab/big-if-true-plugin](https://github.com/Verso-Lab/big-if-true-plugin),
 dem Faktencheck-Skill von [Verso](https://verso.ink/), übersetzt und
 angepasst von Ole Reissmann für [THEFUTURE](https://olereissmann.com/newsletter/),
-einen Newsletter über KI und Journalismus. Die Methode und ihre Regeln
-stammen von Verso.
+einen Newsletter über KI und Journalismus. Die Methode stammt von Verso.
+Diese Fassung ändert drei wichtige Dinge daran.
 
-## Warum es diesen Fork gibt
+## Die drei wichtigen Änderungen
 
-Zwei Gründe: Der Skill soll auf Deutsch arbeiten, und er soll in Langdock
-laufen. Manche KI-Plattformen, darunter Langdock, blockieren aus
-Sicherheitsgründen JavaScript in HTML-Seiten. Die Originalseite baut sich
-mit JavaScript auf und bleibt dort leer.
+### 1. Alles auf Deutsch
 
-## Was geändert wurde
-
-- **Alles auf Deutsch.** Die Anleitung (`SKILL.md`), die
-  Extraktionsregeln, die Recherche-Routen, die Berichtsseite und die
-  Exporte sind übersetzt. Die Urteile heißen Nachprüfen, Nicht
-  verifizierbar und Belegt. Technische Werte bleiben englisch, weil die
-  Skripte sie lesen: die Urteile `r`, `c`, `s`, die Markierungen `[fact]`
-  und `[attribution]`, die Feldnamen in `check.json`.
-- **Deutsche Quellen ergänzt.** Die Recherche-Routen nennen zusätzlich
-  Destatis, Bundestag, RKI, Handelsregister, deutsche Gerichte und
-  Faktenchecker im deutschsprachigen Raum.
-- **Die Berichtsseite ist reines HTML mit Fußnoten.** `scripts/assemble.py`
-  schreibt die ganze Seite fertig als HTML, ohne JavaScript und ohne
-  interaktives CSS. Die einzige Interaktion ist, Links zu folgen:
-  - jede geprüfte Stelle im Artikel ist markiert und trägt eine
-    Fußnotenzahl; sie führt zu Urteil, Begründung und Quellen der Aussage
-    in einer nummerierten Liste unter dem Artikel
-  - jeder Eintrag dort führt zurück zu seiner Stelle
-  - der farbige Balken oben und die Zeile „Nachprüfen“ führen direkt zu
-    den Aussagen
-  - der Export-Bereich unten zeigt Markdown, CSV und JSON in Textfeldern
-    zum Kopieren, dazu Download-Links, wo die Anzeige sie zulässt
-  - weggefallen, weil sie ein Skript oder interaktives CSS brauchen: die
-    Filter nach Urteil, der Wechsel Artikel / Aussagen, die aufklappenden
-    Notizen, die Kopier-Buttons und die Hover-Effekte
-  - die Seite bleibt lesbar, auch wenn eine Anzeige ihre Styles entfernt
-- **Der Footer** nennt diese Fassung neben Verso.
-- **Dokumentkommentare** sind „von einem KI-Assistenten gepostet“ statt
-  „von Claude“, weil in Langdock auch andere Modelle laufen.
-
-Die Seite funktioniert weiterhin auch in Claude, Codex und jedem Browser.
+Die Anleitung (`SKILL.md`), die Extraktionsregeln, die Recherche-Routen,
+die Berichtsseite und die Exporte sind übersetzt. Die Urteile heißen
+Nachprüfen, Nicht verifizierbar und Belegt. Die Routen nennen zusätzlich
+deutsche Quellen: Destatis, Bundestag, RKI, Handelsregister, deutsche
+Gerichte und Faktenchecker im deutschsprachigen Raum. Technische Werte
+bleiben englisch, weil die Skripte sie lesen: die Urteile `r`, `c`, `s`,
+die Markierungen `[fact]` und `[attribution]`, die Feldnamen in
+`check.json`.
 
 Hinweis: Verso hat die Methode an einem Testset gemessen, die englischen
 Anweisungen sind darauf abgestimmt. Die Übersetzung ist nicht gegen
 dieses Testset geprüft.
+
+### 2. Die Berichtsseite funktioniert in Langdock
+
+Manche KI-Plattformen, darunter Langdock, blockieren aus
+Sicherheitsgründen JavaScript in HTML-Seiten. Die Originalseite baut sich
+mit JavaScript auf und bleibt dort leer.
+
+Hier schreibt `scripts/assemble.py` die ganze Seite fertig als HTML,
+ohne JavaScript und ohne interaktives CSS. Die einzige Interaktion ist,
+Links zu folgen:
+
+- jede geprüfte Stelle im Artikel ist markiert und führt, wie ihre
+  Fußnotenzahl, zu Urteil, Begründung und Quellen der Aussage in einer
+  nummerierten Liste unter dem Artikel
+- jeder Eintrag dort führt zurück zu seiner Stelle
+- der farbige Balken oben und die Zeile „Nachprüfen“ führen direkt zu
+  den Aussagen
+- der Export-Bereich unten zeigt Markdown, CSV und JSON in Textfeldern
+  zum Kopieren, dazu Download-Links, wo die Anzeige sie zulässt
+- weggefallen, weil sie ein Skript oder interaktives CSS brauchen: die
+  Filter nach Urteil, der Wechsel Artikel / Aussagen, die aufklappenden
+  Notizen, die Kopier-Buttons und die Hover-Effekte
+- die Seite bleibt lesbar, auch wenn eine Anzeige ihre Styles entfernt
+
+Die Seite funktioniert weiterhin auch in Claude, Codex und jedem Browser.
+
+### 3. Schutz vor Kopien und Agenturmeldungen
+
+Ist der geprüfte Text eine Agenturmeldung (dpa, Reuters, AFP, AP, epd,
+KNA und andere) oder beruht er darauf, findet eine Websuche meist
+dieselbe Meldung wieder: den Text selbst unter einer anderen Adresse oder
+dieselbe Agenturfassung bei anderen Medien, wortgleich oder leicht
+umgeschrieben. Die Originalmethode sagte schon, dass solche Kopien nichts
+beweisen, gab aber keinen Weg, sie zu erkennen. Diese Fassung ergänzt
+vier Sicherungen:
+
+- **Die Agenturbasis wird zuerst festgehalten.** Durchgang 1 beginnt
+  `claims.md` mit einer Zeile `wire:` (`wire: dpa`, `wire: none`), und
+  `assemble.py density` meldet Agenturhinweise im Text, etwa
+  „Berlin (dpa) -“, „lb/dpa“ oder „mit Material von“.
+- **Agenturmaterial führt zur Primärquelle.** Ist der Text
+  Agenturmaterial, gelten die Agentur und jedes Medium mit dieser Meldung
+  als der geprüfte Text selbst. Diese Aussagen werden an dem geprüft,
+  worauf die Agentur sich stützt: Pressemitteilung, Statistik, Behörde,
+  Gericht, Aufzeichnung.
+- **Ein Kopien-Detektor.** `scripts/evidence.py overlap source.txt seite.txt`
+  vergleicht eine Seite mit dem geprüften Text, lässt Zitate weg (zwei
+  Medien dürfen dieselben Worte ehrlich zitieren) und meldet COPY, SAME
+  BASIS oder OWN WORDING. Jedes Medium wird geprüft, bevor es ein Urteil
+  tragen darf.
+- **Eine strengere Messlatte für „Belegt“.** Zwei Medien zählen nur als
+  zwei Quellen, wenn beide erkennbar selbst recherchiert haben. Zwei
+  Umschreibungen derselben Agenturmeldung sind eine Quelle; gibt es nur
+  das, bleibt die Aussage „Nicht verifizierbar“, und die Begründung sagt
+  es.
+
+Das sind Anweisungen an das Modell plus eine mechanische Prüfung; eine
+stark umgeschriebene Fassung kann dem Detektor trotzdem entgehen.
+
+## Kleinere Änderungen
+
+- **`SKILL.md`** beschreibt die Fußnotenseite und den Export-Bereich und
+  hat eine kürzere Beschreibung (unter 250 Zeichen).
+- **Der Footer** nennt diese Fassung neben Verso.
+- **Dokumentkommentare** sind „von einem KI-Assistenten gepostet“ statt
+  „von Claude“, weil in Langdock auch andere Modelle laufen.
 
 ## In Langdock installieren
 

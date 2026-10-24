@@ -173,6 +173,23 @@ def read_claims(claims_f):
     return claims, errs
 
 
+def wire_notice(text, claims_f):
+    """Agency copy changes what counts as evidence (SKILL.md, Copies of the
+    text and agency copy). Print what the text shows, and whether claims.md
+    records it."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from evidence import wire_markers
+    marks = wire_markers(text)
+    has_line = any(re.match(r"^\s*wire\s*:", l, re.I) for l in open(claims_f, encoding="utf-8"))
+    if marks:
+        print("AGENCY MARKERS in the checked text: " + "; ".join(marks[:8]))
+        print("  If the text is agency copy, outlets carrying that story are the text itself: "
+              "check those claims against what the agency relied on (SKILL.md).")
+    if not has_line:
+        print("NOTE: claims.md has no \"wire:\" line. Add one at the top: \"wire: dpa\" "
+              "(the agency or agencies) or \"wire: none\".")
+
+
 def cmd_density(src_f, claims_f):
     text = open(src_f).read()
     claims, errs = read_claims(claims_f)
@@ -199,6 +216,7 @@ def cmd_density(src_f, claims_f):
     n = len(claims)
     wpc = words / max(1, n)
     json.dump({"claims": n, "quotes": quotes}, open(PASS1, "w"), indent=1)
+    wire_notice(text, claims_f)
     print(f"recorded {n} claims in {PASS1}: each needs its own verdict in check.json")
     print(f"density: {wpc:.0f} words per claim ({words} words, {n} claims)")
     if wpc > 20:

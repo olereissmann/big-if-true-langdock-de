@@ -81,7 +81,10 @@ hält die Liste fest: Der Bericht wird nur gebaut, wenn jede Aussage
 darauf eine eigene Aussage in check.json bekommt, verankert dort, wo ihr
 Zitat aus Durchgang 1 steht. Behebe jetzt, was es meldet, solange ein
 neuer Durchgang billig ist. Ab hier werden Aussagen geteilt, nie
-zusammengelegt.
+zusammengelegt. Es gibt außerdem die Agenturhinweise aus, die es im
+Text findet, und verlangt die Zeile `wire:` oben in claims.md (siehe
+Kopien des Textes und Agenturmeldungen, unten); kläre diese Zeile vor
+Durchgang 2.
 
 ## Durchgang 2: jede Aussage prüfen
 
@@ -142,7 +145,8 @@ could_not_verify.
   Eine Summe, die nicht aufgeht, ist ein Befund und braucht keine Suche.
 - **Unabhängigkeit.** Der geprüfte Text, eine interessierte Partei und
   ein Medium, das den Text wiederholt, beweisen nichts. Dieselbe
-  Agenturmeldung in fünf Medien ist eine Quelle. Dass Worte gesagt
+  Agenturmeldung in fünf Medien ist eine Quelle (siehe Kopien des Textes
+  und Agenturmeldungen). Dass Worte gesagt
   wurden, beweist der eigene Beleg der sprechenden Person oder zwei
   Medien, die selbst recherchiert haben; ein Medium, das die Worte
   bringt, lässt es bei could_not_verify.
@@ -165,6 +169,44 @@ could_not_verify.
 - **Ist das Suchbudget erschöpft**, markiere jede verbleibende Aussage
   als could_not_verify, mit dem Hinweis, dass sie nicht recherchiert
   wurde.
+
+### Kopien des Textes und Agenturmeldungen
+
+Eine Suche nach einer Aussage landet oft beim geprüften Text selbst:
+derselbe Artikel unter einer anderen Adresse (ein Syndication-Partner,
+ein Portal, ein Aggregator) oder dieselbe Agenturmeldung (dpa, Reuters,
+AFP, AP, epd, KNA und andere) bei anderen Medien, wortgleich oder leicht
+umgeschrieben. Nichts davon ist ein Beleg für den Text. Es beweist nur,
+dass der Text kopiert wurde.
+
+1. **Kläre die Agenturbasis vor Durchgang 2.** Die Zeile `wire:` oben
+   in claims.md sagt, ob der Text ganz oder teilweise Agenturmaterial
+   ist (`wire: dpa`, `wire: dpa, Reuters`, `wire: none`). Anzeichen: eine
+   Ortsmarke wie „Berlin (dpa) -“, ein Kürzel wie „lb/dpa“, „mit
+   Material von“, „Quelle: dpa“, oder ein Medium, das die Agentur als
+   Quelle nennt. Ist der Text Agenturmaterial, gelten die Agentur und
+   jedes Medium mit dieser Meldung als der geprüfte Text selbst. Für
+   diese Aussagen sind andere Medien kein Weg: Geh zu dem, worauf die
+   Agentur sich stützt, etwa die Pressemitteilung, die Statistik, die
+   Angabe der Behörde, das Gericht oder die Aufzeichnung der
+   Pressekonferenz.
+2. **Prüfe jedes Medium, bevor es ein Urteil trägt.** Speichere den Text
+   der Seite in einer Datei und führe `python3 scripts/evidence.py overlap
+   source.txt seite.txt` aus. Es lässt Zitate weg (zwei Medien dürfen
+   dieselben Worte ehrlich zitieren) und vergleicht den Rest. COPY: Die
+   Seite ist der Text oder seine Agenturfassung; zitiere sie nie. SAME
+   BASIS: Sie schreibt sehr wahrscheinlich dieselbe Meldung um; sie zählt
+   als dieselbe Quelle wie der Text, nicht als unabhängige. OWN WORDING:
+   kein Hinweis auf eine Kopie. Primärbelege (Stufe 1 und 2) brauchen
+   diesen Test nicht. Ohne Code-Werkzeug vergleiche mit dem Auge: Ein
+   Dutzend gleicher Wörter am Stück außerhalb eines Zitats ist eine Kopie.
+3. **Zwei Medien zählen nur mit eigener Recherche.** Unabhängig heißt
+   erkennbar eigene Arbeit: eigene Zitate, eine eigene Korrespondentin,
+   Details, die in der Agenturfassung fehlen, und eine Autorenzeile, die
+   nicht die der Agentur ist. Zwei Umschreibungen derselben
+   Agenturmeldung sind eine Quelle. Gibt es nur das, lautet das Urteil
+   could_not_verify, und die Begründung sagt es („nur in Fassungen der
+   dpa-Meldung gefunden“).
 
 ### Die drei Urteile
 

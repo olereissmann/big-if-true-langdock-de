@@ -18,6 +18,8 @@ exact URL queried. Stdlib only. No keys.
   blocked URL --needs-user "sign in"   …a login or a cleared check would open it: it goes in the ask
   blocked URL --opened / --skipped     …after the user replied: read, or left as is
   blocked --no-browser          no browser this session: every open entry becomes unreachable
+  overlap source.txt page.txt   is this page a copy of the checked text or of the same agency
+                                story? (save the page's text to a file first)
 
 Everything printed is a lead to open and read, not a verdict.
 """
@@ -180,6 +182,94 @@ def cmd_blocked(a):
         print("no blocked pages recorded")
 
 
+# ---- copies of the checked text and agency copy ----
+# A search for a claim often lands on the checked text itself: the same
+# article at another address, or the same news-agency story run by other
+# outlets. Such a page proves nothing. `overlap` compares a page with
+# source.txt, quotations stripped (two outlets may honestly quote the same
+# words), and reports the longest run of identical words.
+
+# Credits and datelines that mark news-agency copy. A hit is a lead, not proof.
+WIRE_MARKERS = [
+    (r"\((?:dpa|dpa-AFX|AFP|AP|Reuters|epd|KNA|dts|SID|APA|sda|SDA|Keystone-SDA|ANSA|EFE|Belga|ANP|TT|NTB|Ritzau)\)", "agency dateline"),
+    (r"\b[a-zA-Z]{2,5}/(?:dpa|DPA|afp|AFP|rtr|Reuters|ap|AP|epd|kna|KNA|dts|sid)\b", "agency credit line"),
+    (r"\b(?:dpa|dpa-AFX|Reuters|Agence France-Presse|Associated Press|AFP|epd|KNA)\b", "agency named"),
+    (r"\b[Mm]it Material (?:von|der|des) ", "credit line (mit Material von)"),
+    (r"\bQuelle: ?(?:dpa|AFP|Reuters|AP|epd|KNA)\b", "credit line (Quelle)"),
+    (r"\b(?:[Ww]ith|[Aa]dditional) reporting (?:by|from)\b", "credit line (reporting by)"),
+    (r"\b(?:[Ww]riting|[Ee]diting) by\b", "wire credit line (writing/editing by)"),
+]
+
+_QUOTED = re.compile(r'„[^“”"]{0,600}[“”"]|“[^”]{0,600}”|"[^"]{0,600}"|«[^»]{0,600}»|»[^«]{0,600}«')
+
+
+def wire_markers(text):
+    found = []
+    for pat, kind in WIRE_MARKERS:
+        for m in re.finditer(pat, text):
+            hit = f"{kind}: {m.group(0).strip()}"
+            if hit not in found:
+                found.append(hit)
+    return found
+
+
+def _words(text):
+    return re.findall(r"\w+", _QUOTED.sub(" ", text).lower())
+
+
+def overlap_report(src_text, page_text, k=6):
+    a, b = _words(src_text), _words(page_text)
+    if len(b) < k or len(a) < k:
+        return 0, "", 0.0
+    index = {}
+    for i in range(len(a) - k + 1):
+        index.setdefault(tuple(a[i:i + k]), []).append(i)
+    best, best_at = 0, None
+    j = 0
+    while j <= len(b) - k:
+        starts = index.get(tuple(b[j:j + k]))
+        if not starts:
+            j += 1
+            continue
+        run_here = 0
+        for i in starts:
+            n = k
+            while i + n < len(a) and j + n < len(b) and a[i + n] == b[j + n]:
+                n += 1
+            if n > run_here:
+                run_here = n
+            if n > best:
+                best, best_at = n, (j, n)
+        j += max(1, run_here - k + 1)
+    grams_a = {tuple(a[i:i + 5]) for i in range(len(a) - 4)}
+    grams_b = [tuple(b[i:i + 5]) for i in range(len(b) - 4)]
+    share = sum(g in grams_a for g in grams_b) / max(1, len(grams_b))
+    passage = " ".join(b[best_at[0]:best_at[0] + best_at[1]]) if best_at else ""
+    return best, passage, share
+
+
+def cmd_overlap(a):
+    src = open(a.source, encoding="utf-8").read()
+    page = open(a.page, encoding="utf-8").read()
+    run, passage, share = overlap_report(src, page)
+    print(f"longest identical run outside quotations: {run} words")
+    if passage:
+        print(f"  \"{passage[:200]}{'…' if len(passage) > 200 else ''}\"")
+    print(f"share of the page's wording found in the checked text: {share:.0%}")
+    marks = wire_markers(page)
+    if marks:
+        print("agency markers on the page: " + "; ".join(marks[:8]))
+    if run >= 12 or share >= 0.30:
+        print("COPY: this page is the checked text or the same agency copy. It proves nothing; "
+              "never cite it for a verdict.")
+    elif run >= 8 or share >= 0.10:
+        print("SAME BASIS: this page most likely rewrites the same story or agency copy. It counts "
+              "as the same source as the checked text, not as an independent one.")
+    else:
+        print("OWN WORDING: no sign of copying. It still counts as independent only if it shows its "
+              "own reporting (its own quotes, correspondent or details).")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--n", type=int, default=5, help="results to show")
@@ -197,6 +287,7 @@ def main():
     for f in ("settled", "unreachable", "opened", "skipped", "no-browser"):
         x.add_argument("--" + f, dest=f.replace("-", "_"), action="store_true")
     x.add_argument("--needs-user", dest="needs_user"); x.set_defaults(f=cmd_blocked)
+    x = s.add_parser("overlap"); x.add_argument("source"); x.add_argument("page"); x.set_defaults(f=cmd_overlap)
     a = p.parse_args()
     a.f(a)
 

@@ -67,6 +67,8 @@ die es klären würden.
 ## Fallen
 
 - Zitatsammlungen im Netz sind kein Beleg.
+- Medien mit derselben Agenturmeldung bringen alle dieselben Worte; das ist
+  eine Quelle, nicht viele. Prüfe sie mit `evidence.py overlap` (SKILL.md).
 - Ein Transkript von Dritten ist schwächer als das der Institution
   selbst; sag, welches du benutzt hast.
 - „Sagte vergangene Woche“ ohne Ort: Erst den Ort finden, dann die Worte.
