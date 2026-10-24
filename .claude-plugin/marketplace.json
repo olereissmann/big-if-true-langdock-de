@@ -8,10 +8,10 @@
   },
   "plugins": [
     {
-      "name": "big-if-true",
-      "displayName": "Big If True",
+      "name": "big-if-true-de",
+      "displayName": "Big If True (Deutsch, ohne JavaScript)",
       "source": "./",
-      "version": "0.7.1"
+      "version": "0.7.1-langdock-de"
     }
   ]
 }

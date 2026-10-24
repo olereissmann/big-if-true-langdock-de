@@ -1,4 +1,47 @@
-# Big If True
+# Big If True, deutsche Fassung ohne JavaScript
+
+Dies ist ein Fork von [Verso-Lab/big-if-true-plugin](https://github.com/Verso-Lab/big-if-true-plugin),
+dem Faktencheck-Skill von [Verso](https://verso.ink). Methode, Skripte und
+Prüfschritte stammen von Verso. Zwei Dinge sind anders:
+
+**1. Alles auf Deutsch.** Die Anleitung (`SKILL.md`), die
+Extraktionsregeln, die Recherche-Routen, die Berichtsseite und die
+Exporte sind übersetzt. Die Routen nennen zusätzlich deutsche Quellen
+(Destatis, Bundestag, RKI, Handelsregister, Faktenchecker im
+deutschsprachigen Raum). Technische Werte bleiben englisch, weil die
+Skripte sie lesen: die Urteile `r`, `c`, `s`, die Markierungen `[fact]`
+und `[attribution]`, die Feldnamen in `check.json`. Die Urteile heißen
+auf der Seite Nachprüfen, Nicht verifizierbar und Belegt.
+
+**2. Die Berichtsseite enthält kein JavaScript.** Manche KI-Plattformen,
+darunter Langdock, blockieren aus Sicherheitsgründen Skripte in
+HTML-Seiten. Die Originalseite baut sich mit JavaScript auf und bleibt
+dort leer. Hier schreibt `scripts/assemble.py` die ganze Seite als
+reines HTML, und die interaktiven Teile laufen mit HTML und CSS:
+
+- ein Klick auf eine markierte Stelle öffnet ihre Belegnotiz
+- die Filter nach Urteil und der Wechsel Artikel / Aussagen sind Radio-Buttons
+- der Export-Bereich zeigt Markdown, CSV und JSON in Textfeldern zum
+  Kopieren, dazu Download-Links, wo die Anzeige sie zulässt
+- die Kopier-Buttons fallen weg, weil die Zwischenablage ein Skript braucht
+
+Die Seite funktioniert weiterhin auch in Claude, Codex und jedem Browser.
+
+**In Langdock installieren:** den Ordner `skills/big-if-true-de` als Skill
+hochladen (gezippt, falls Langdock eine Datei verlangt). Für die
+Berichtsseite braucht der Skill Code-Ausführung; ohne sie gibt es einen
+Textbericht.
+
+Hinweis: Verso hat die Methode an einem Testset gemessen, die englischen
+Anweisungen sind darauf abgestimmt. Die Übersetzung ist nicht gegen
+dieses Testset geprüft.
+
+Lizenz: MIT, wie das Original. Die Methode und alle Verdienste daran
+gehören Verso.
+
+---
+
+## The original README
 
 A fact-checking plugin for Claude by [Verso](https://verso.ink). Give it an
 article, a draft, a newsletter or a press release: it finds every checkable

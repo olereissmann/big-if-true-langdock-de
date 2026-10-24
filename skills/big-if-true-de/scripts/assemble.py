@@ -1,62 +1,71 @@
 #!/usr/bin/env python3
-"""Big If True report assembler.
+"""Big If True: Assembler für den Bericht (deutsche Fassung ohne JavaScript).
 
-The checked text flows through this script as data — it is copied from the
-source file and never passes through the model's own writing, which is what
-guarantees the annotated article is verbatim.
+Der geprüfte Text fließt als Daten durch dieses Skript: Er wird aus der
+Quelldatei kopiert und geht nie durch das eigene Schreiben des Modells.
+Das garantiert, dass der kommentierte Artikel wörtlich ist.
 
-Usage:
+Aufruf:
   python3 assemble.py density SOURCE.txt CLAIMS.md
-      Pass 1 check, run BEFORE verifying: every claim's quote must sit in
-      the text exactly once, the list must meet the words-per-claim
-      standard, and the list is recorded in pass1.json in the working
-      directory. The build refuses a check.json that drops or merges any
-      recorded claim: each needs its own claim whose quote overlaps its
-      Pass 1 quote. Re-running density may add claims, never remove one.
+      Prüfung für Durchgang 1, VOR dem Verifizieren: Das Zitat jeder
+      Aussage muss genau einmal im Text stehen, die Liste muss die
+      Schwelle für Wörter pro Aussage erfüllen, und die Liste wird in
+      pass1.json im Arbeitsordner festgehalten. Der Build lehnt eine
+      check.json ab, die eine festgehaltene Aussage weglässt oder
+      zusammenlegt: Jede braucht eine eigene Aussage, deren Zitat ihr
+      Zitat aus Durchgang 1 überlappt. Ein neuer density-Lauf darf
+      Aussagen hinzufügen, nie entfernen.
   python3 assemble.py build SOURCE.txt CHECK.json OUT.html
-      (the template is ../assets/template.html; pass a fourth path to
-      override: build SOURCE.txt CHECK.json TEMPLATE.html OUT.html)
+      (die Vorlage ist ../assets/template.html; ein vierter Pfad
+      überschreibt sie: build SOURCE.txt CHECK.json TEMPLATE.html OUT.html)
+      Die Seite wird vollständig hier geschrieben und enthält kein
+      JavaScript.
   python3 assemble.py export md|csv|json|comments SOURCE.txt CHECK.json OUT
-      The same findings in another shape, only when the user asks:
-      md   the text report (the fallback format in SKILL.md), for docs,
-           email, Slack; csv  one row per claim, for spreadsheets and
-           corrections logs; json  the findings with article-order
-           numbers and resolved sources, for tooling; comments  the
-           needs_review findings as ready-to-post document comments:
-           `text` (plain, for Google Docs) and `markdown` (inline links,
-           for Notion), with a `find` fragment and a start...end
-           `selection` that locate the passage — see references/write-back.md.
-      Same validation and article order as build.
+      Dieselben Befunde in anderer Form, nur wenn die Nutzerin darum
+      bittet: md  der Textbericht (die Ausweichform in SKILL.md), für
+      Dokumente, E-Mail, Slack; csv  eine Zeile pro Aussage, für
+      Tabellen und Korrekturlisten; json  die Befunde mit Nummern in
+      Artikelreihenfolge und aufgelösten Quellen, für Werkzeuge;
+      comments  die needs_review-Befunde als fertige
+      Dokumentkommentare: `text` (schlicht, für Google Docs) und
+      `markdown` (Inline-Links, für Notion), mit einem `find`-Stück und
+      einer Anfang...Ende-`selection`, die die Stelle finden; siehe
+      references/write-back.md. Gleiche Prüfung und Reihenfolge wie build.
 
-SOURCE.txt  The checked text, exactly as the user provided it.
-            Paragraphs separated by blank lines.
+SOURCE.txt  Der geprüfte Text, genau wie die Nutzerin ihn geliefert hat.
+            Absätze durch Leerzeilen getrennt.
 
-CLAIMS.md   The Pass 1 list (references/extraction.md). A claim is a line
-            "- [fact] ..." or "- [attribution] ...", followed by a line
-            "> " and the exact quote it comes from. Every other line
-            (paragraph headings, discard log) is free text.
+CLAIMS.md   Die Liste aus Durchgang 1 (references/extraction.md). Eine
+            Aussage ist eine Zeile "- [fact] ..." oder "- [attribution] ...",
+            gefolgt von einer Zeile "> " mit dem exakten Zitat. Alle
+            anderen Zeilen (Absatzüberschriften, Ausschussprotokoll) sind
+            freier Text.
 
-CHECK.json  One file, every field named. Claims are anchored by quotation —
-            no ids, no sentence numbers; the build sorts claims into
-            article order by quote position and derives ids from that,
-            so the array's order never matters:
+CHECK.json  Eine Datei, jedes Feld benannt. Aussagen werden über Zitate
+            verankert, nicht über IDs oder Satznummern; der Build sortiert
+            sie nach der Position ihres Zitats in Artikelreihenfolge und
+            vergibt daraus die Nummern, die Reihenfolge im Array ist also
+            egal. Aussagen ("claim") und Begründungen ("why") auf Deutsch;
+            "quote" immer wörtlich in der Sprache des Textes:
 {
-  "page_title": "<Subject>, Checked",
-  "title": headline, "source": outlet, "byline": author or "",
-  "published": date shown or "", "checked": today,
-  "refs": {key: [publisher label, url], ...},
-  "thin_text": only for a genuinely thin text (heavy rhetoric, lists,
-               captions): one line saying why — the density gate asks for
-               it before building a report above 20 words per claim,
+  "page_title": "<Thema>, geprüft",
+  "title": Überschrift, "source": Medium, "byline": Autorin oder "",
+  "published": angezeigtes Datum oder "", "checked": heute,
+  "refs": {Schlüssel: [Bezeichnung der Quelle, url], ...},
+  "thin_text": nur bei einem wirklich dünnen Text (viel Rhetorik, Listen,
+               Bildunterschriften): eine Zeile, warum. Die Dichteschwelle
+               verlangt das, bevor sie einen Bericht über 20 Wörtern pro
+               Aussage baut,
   "claims": [
-    {"verdict": "r"|"c"|"s",     r=needs_review c=could_not_verify s=supported
-     "claim":  the claim text,
-     "why":    one-or-two sentence rationale,
-     "refs":   [ref keys] (empty allowed when "why" explains why),
-     "quote":  the exact stretch of the source text this claim comes from,
-               copied verbatim — a phrase when the claim is part of a
-               sentence, the sentence when it is the whole point. If the
-               build says the quote is ambiguous, extend it until unique.},
+    {"verdict": "r"|"c"|"s",     r=needs_review (Nachprüfen) c=could_not_verify (Nicht verifizierbar) s=supported (Belegt)
+     "claim":  der Aussagetext,
+     "why":    Begründung in ein oder zwei Sätzen,
+     "refs":   [Quellenschlüssel] (leer erlaubt, wenn "why" erklärt, warum),
+     "quote":  die exakte Stelle des Quelltextes, aus der die Aussage
+               stammt, wörtlich kopiert: eine Wendung, wenn die Aussage
+               Teil eines Satzes ist, der Satz, wenn er ihr Kern ist. Meldet
+               der Build, das Zitat sei mehrdeutig, verlängere es, bis es
+               eindeutig ist.},
     ...
   ]
 }
@@ -397,21 +406,8 @@ def cmd_build(src, check_f, tpl_f, out_f):
                 seg.append("q")
         paras.append(segs)
 
-    payload = {
-        "title": check.get("title", ""), "source": check.get("source", ""),
-        "byline": check.get("byline", ""), "published": check.get("published", ""),
-        "checked": check.get("checked", ""), "refs": refs,
-        "claims": claims_out, "paragraphs": paras,
-        # the page's Export menu copies these; built here so page and files agree
-        "exports": {fmt: export_body(fmt, d) for fmt in ("md", "csv", "json")},
-    }
-    tpl = open(tpl_f).read()
-    # "<\/" keeps any "</script>" inside the article from ending the data block
-    data = json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")
-    out = (tpl
-           .replace("__REPORT_TITLE__", html.escape(check.get("page_title", check.get("title", "Checked"))))
-           .replace("__BIG_IF_TRUE_DATA__", data))
-    open(out_f, "w").write(out)
+    out = render_page(open(tpl_f, encoding="utf-8").read(), d, paras)
+    open(out_f, "w", encoding="utf-8").write(out)
     print(f"OK: {out_f} · {len(claims_out)} claims · {len(paras)} paragraphs")
 
     # Pass 1 coverage report (the hard density gate already ran above)
@@ -437,9 +433,127 @@ def cmd_build(src, check_f, tpl_f, out_f):
         print("     Confirm each was consciously judged (discard log), not skipped.")
 
 
+
+# ---- the report page, rendered here: the page itself runs no JavaScript ----
+# Every word the page shows that depends on the data comes from PAGE; the
+# fixed labels live in assets/template.html. Translate both together.
+PAGE = {
+    "verdict": {"s": "Belegt", "r": "Nachprüfen", "c": "Nicht verifizierbar"},
+    "published": "Veröffentlicht {}",
+    "checked": "Geprüft {}",
+    "claim_n": "Aussage {}",
+    "jump": "Aussage {n}: {claim}",
+    "close": "Belegnotiz schließen",
+    "no_source_r": "keine Quelle angegeben",
+    "no_source": "keine verlässliche unabhängige Quelle gefunden",
+    "lede": ("{n} {w} im Live-Web geprüft: <b>{r} nachprüfen</b>, "
+             "{c} nicht unabhängig verifizierbar, {s} belegt."),
+    "claim_word": ("Aussage", "Aussagen"),
+    "slug_default": "faktencheck",
+}
+
+
+def _e(x):
+    return html.escape(str(x), quote=True)
+
+
+def _data_uri(mime, body):
+    from urllib.parse import quote
+    return f"data:{mime};charset=utf-8," + quote(body, safe="")
+
+
+def render_page(tpl, d, paras):
+    """Fill the template: header, spine, article with its claim cards, the
+    claims list and the export texts, all as static HTML."""
+    check, refs, claims = d["check"], d["refs"], d["claims"]
+    by_id = {c[0]: c for c in claims}
+    rank = {"r": 0, "c": 1, "s": 2}
+
+    def worst(ids):
+        return min((by_id[i][1] for i in ids), key=rank.get)
+
+    def note(c, with_claim, el_id=""):
+        n, v, claim, why, keys, _ = c
+        if keys:
+            srcs = " &middot;&nbsp;".join(
+                f'<a href="{_e(refs[k][1])}" target="_blank" rel="noopener">{_e(refs[k][0])}</a>' for k in keys)
+        else:
+            srcs = f'<span class="none">{_e(PAGE["no_source_r"] if v == "r" else PAGE["no_source"])}</span>'
+        ct = ""
+        if with_claim:
+            ct = f'<span class="claimtext">{_e(re.sub(r"[.。]+\s*$", "", claim))}.</span> '
+        idattr = f' id="{el_id}"' if el_id else ""
+        return (f'<div class="note v-{v}"{idattr}><span class="verdict">{_e(PAGE["verdict"][v])}</span>: '
+                f'{ct}<span class="why">{_e(why)}</span><span class="srcs">{srcs}'
+                f'<span class="cid">{_e(PAGE["claim_n"].format(n))}</span></span></div>')
+
+    # article: each claimed stretch links to its card, which sits under the paragraph
+    first_card = {}
+    art = []
+    for pi, para in enumerate(paras):
+        body, ticks, cards = [], [], []
+        for si, seg in enumerate(para):
+            t, ids = seg[0], seg[1]
+            if ids:
+                w, k = worst(ids), f"k{pi}_{si}"
+                for i in ids:
+                    first_card.setdefault(i, k)
+                inner = f'<a class="mk" href="#{k}"><mark class="{w}">{_e(t)}</mark></a>'
+                ticks.append(f'<a class="{w}" href="#{k}" tabindex="-1"></a>')
+                cards.append(f'<div class="ic" id="{k}">'
+                             + "".join(note(by_id[i], len(ids) > 1) for i in ids)
+                             + f'<a class="ic-close" href="#p{pi}" aria-label="{_e(PAGE["close"])}">&times;</a></div>')
+            else:
+                inner = _e(t)
+            body.append(f'<span class="q">{inner}</span>' if len(seg) > 2 else inner)
+        pm = f'<span class="pmarks" aria-hidden="true">{"".join(ticks)}</span>' if ticks else ""
+        art.append(f'<div class="para" id="p{pi}">{pm}<p>{"".join(body)}</p></div>' + "".join(cards))
+
+    lst = "".join(note(c, True, f"l{c[0]}") for c in claims)
+
+    def spine(target):
+        return "".join(
+            f'<a class="{c[1]}" href="#{target(c[0])}" title="{_e(PAGE["jump"].format(n=c[0], claim=c[2]))}" '
+            f'aria-label="{_e(PAGE["jump"].format(n=c[0], claim=c[2]))}"></a>' for c in claims)
+
+    counts = Counter(c[1] for c in claims)
+    meta = [check.get("source", ""), check.get("byline", ""),
+            PAGE["published"].format(check["published"]) if check.get("published") else "",
+            PAGE["checked"].format(check["checked"]) if check.get("checked") else ""]
+    title = check.get("title", "")
+    slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60] or PAGE["slug_default"]
+    x = {fmt: export_body(fmt, d) for fmt in ("md", "csv", "json")}
+    vals = {
+        "REPORT_TITLE": _e(check.get("page_title", title or "Checked")),
+        "TITLE": _e(title),
+        "META": "".join(f"<span>{_e(m)}</span>" for m in meta if m),
+        "SPINE_ARTICLE": spine(lambda n: first_card.get(n, f"l{n}")),
+        "SPINE_LIST": spine(lambda n: f"l{n}"),
+        "COUNT": str(len(claims)),
+        "LEDE": PAGE["lede"].format(n=len(claims), w=PAGE["claim_word"][len(claims) != 1],
+                                    r=counts["r"], c=counts["c"], s=counts["s"]),
+        "N_ALL": str(len(claims)), "N_R": str(counts["r"]), "N_C": str(counts["c"]), "N_S": str(counts["s"]),
+        "ARTICLE": "".join(art),
+        "LIST": lst,
+        "SLUG": _e(slug),
+        "X_MD": _e(x["md"]), "X_CSV": _e(x["csv"].lstrip("\ufeff")), "X_JSON": _e(x["json"]),
+        "DL_MD": _e(_data_uri("text/markdown", x["md"])),
+        "DL_CSV": _e(_data_uri("text/csv", x["csv"])),
+        "DL_JSON": _e(_data_uri("application/json", x["json"])),
+    }
+    # one pass over the template, so text inside the article can never be
+    # mistaken for a placeholder
+    out = re.sub(r"__([A-Z_]+)__", lambda m: vals.get(m.group(1), m.group(0)), tpl)
+    if re.search(r"<script", out, re.I):
+        sys.exit("The page would contain a <script> tag; this edition must stay script-free.")
+    return out
+
 VERDICT_WORD = {"r": "needs_review", "c": "could_not_verify", "s": "supported"}
-FOOTER = ("*Checked with the [Big If True](https://verso.ink) method by Verso. "
-          "AI can make mistakes, judge the evidence through the links.*")
+FOOTER = ("*Geprüft mit der Methode [Big If True](https://verso.ink) von Verso. "
+          "KI kann Fehler machen, beurteile die Belege über die Links.*")
+# German labels for the md and csv exports and the document comments;
+# the json export keeps the English verdict codes for tooling.
+VERDICT_DE = {"needs_review": "Nachprüfen", "could_not_verify": "Nicht verifizierbar", "supported": "Belegt"}
 
 
 def export_body(fmt, d):
@@ -457,29 +571,29 @@ def export_body(fmt, d):
         import csv, io
         buf = io.StringIO()
         w = csv.writer(buf)
-        w.writerow(["n", "verdict", "claim", "quote", "rationale", "sources", "source_urls"])
+        w.writerow(["Nr", "Urteil", "Aussage", "Zitat", "Begründung", "Quellen", "Quellen-URLs"])
         for r in rows:
-            w.writerow([r["n"], r["verdict"], r["claim"], r["quote"], r["why"],
+            w.writerow([r["n"], VERDICT_DE[r["verdict"]], r["claim"], r["quote"], r["why"],
                         "; ".join(s["label"] for s in r["sources"]),
                         " ".join(s["url"] for s in r["sources"])])
         body = "﻿" + buf.getvalue()   # BOM so Excel reads UTF-8
     elif fmt == "md":
         def srcs(r):
-            return " Sources: " + ", ".join(f"[{s['label']}]({s['url']})" for s in r["sources"]) if r["sources"] else ""
+            return " Quellen: " + ", ".join(f"[{s['label']}]({s['url']})" for s in r["sources"]) if r["sources"] else ""
         def full(r):
             return f"**{r['n']}. {r['claim']}** {r['why']}{srcs(r)}\n> {r['quote']}\n"
         def compact(r):
             return f"- **{r['n']}.** {r['claim']}{srcs(r)}"
         by = {w: [r for r in rows if r["verdict"] == w] for w in VERDICT_WORD.values()}
         line = " · ".join(x for x in (meta["source"], meta["byline"],
-                                       f"Published {meta['published']}" if meta["published"] else "",
-                                       f"Checked {meta['checked']}" if meta["checked"] else "") if x)
-        parts = [f"## Fact-check: {meta['title']}", line,
-                 f"Checked {len(rows)} claims: {counts['supported']} supported, "
-                 f"{counts['needs_review']} need review, {counts['could_not_verify']} could not be verified.", ""]
-        parts += [f"### ⚠️ Needs review ({counts['needs_review']})", ""] + [full(r) for r in by["needs_review"]]
-        parts += [f"### ❓ Could not verify ({counts['could_not_verify']})", ""] + [full(r) for r in by["could_not_verify"]]
-        parts += [f"### ✓ Supported ({counts['supported']})", ""] + [compact(r) for r in by["supported"]]
+                                       f"Veröffentlicht {meta['published']}" if meta["published"] else "",
+                                       f"Geprüft {meta['checked']}" if meta["checked"] else "") if x)
+        parts = [f"## Faktencheck: {meta['title']}", line,
+                 f"{len(rows)} {'Aussage' if len(rows) == 1 else 'Aussagen'} geprüft: {counts['supported']} belegt, "
+                 f"{counts['needs_review']} nachprüfen, {counts['could_not_verify']} nicht verifizierbar.", ""]
+        parts += [f"### ⚠️ Nachprüfen ({counts['needs_review']})", ""] + [full(r) for r in by["needs_review"]]
+        parts += [f"### ❓ Nicht verifizierbar ({counts['could_not_verify']})", ""] + [full(r) for r in by["could_not_verify"]]
+        parts += [f"### ✓ Belegt ({counts['supported']})", ""] + [compact(r) for r in by["supported"]]
         parts += ["", "---", "", FOOTER, ""]
         body = "\n".join(p for p in parts if p is not None)
     elif fmt == "comments":
@@ -512,7 +626,7 @@ def find_string(quote, text, min_words=5, max_words=12):
     return q
 
 
-VERDICT_LABEL = {"needs_review": "Needs Review", "could_not_verify": "Could Not Verify", "supported": "Supported"}
+VERDICT_LABEL = VERDICT_DE
 
 
 def sources_block(srcs, links):
@@ -523,17 +637,17 @@ def sources_block(srcs, links):
         return ""
     if links == "markdown":
         items = " · ".join(f"[{s['label']}]({s['url']})" for s in srcs)
-        return ("Source: " if len(srcs) == 1 else "Sources: ") + items
+        return ("Quelle: " if len(srcs) == 1 else "Quellen: ") + items
     if len(srcs) == 1:
-        return f"Source: {srcs[0]['label']}\n{srcs[0]['url']}"
-    return "Sources:\n" + "\n".join(f"{i}. {s['label']}\n   {s['url']}" for i, s in enumerate(srcs, 1))
+        return f"Quelle: {srcs[0]['label']}\n{srcs[0]['url']}"
+    return "Quellen:\n" + "\n".join(f"{i}. {s['label']}\n   {s['url']}" for i, s in enumerate(srcs, 1))
 
 
 def finding_text(r, posted_by_claude=False, links="plain"):
     """One finding as a margin note or a paste-ready snippet: the verdict,
     the rationale, the sources, a provenance line."""
-    prov = "Fact-check by Big If True (verso.ink)." + (" Comment posted by Claude." if posted_by_claude else "")
-    return "\n\n".join(p for p in (f"Verdict: {VERDICT_LABEL[r['verdict']]}", r["why"],
+    prov = "Faktencheck mit Big If True (verso.ink)." + (" Kommentar von einem KI-Assistenten gepostet." if posted_by_claude else "")
+    return "\n\n".join(p for p in (f"Urteil: {VERDICT_LABEL[r['verdict']]}", r["why"],
                                     sources_block(r["sources"], links), prov) if p)
 
 

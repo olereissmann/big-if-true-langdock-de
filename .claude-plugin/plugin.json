@@ -1,8 +1,8 @@
 {
-  "name": "big-if-true",
-  "displayName": "Big If True",
-  "version": "0.7.1",
-  "description": "Rigorous, claim-by-claim fact-checking: every checkable claim in a text, verified against primary records and the live web, delivered as an annotated report with sources.",
+  "name": "big-if-true-de",
+  "displayName": "Big If True (Deutsch, ohne JavaScript)",
+  "version": "0.7.1-langdock-de",
+  "description": "Gründlicher Faktencheck, Aussage für Aussage: jede prüfbare Aussage eines Textes, geprüft an Primärquellen und dem Live-Web, als kommentierter Bericht mit Quellen. Deutsche Fassung, Berichtsseite ohne JavaScript.",
   "author": {
     "name": "Verso",
     "email": "team@verso.ink",

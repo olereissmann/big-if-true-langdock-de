@@ -1,0 +1,84 @@
+{
+  "page_title": "Werk in Riverton, geprüft",
+  "title": "Erweiterung des Werks bringt neue Jobs nach Riverton",
+  "source": "Testmedium",
+  "byline": "A. Autorin",
+  "published": "1. August 2026",
+  "checked": "30. August 2026",
+  "refs": {
+    "reg": [
+      "Handelsregister des Bundesstaats",
+      "https://example.com/registry"
+    ],
+    "daily": [
+      "Regionale Tageszeitung",
+      "https://example.com/daily"
+    ],
+    "census": [
+      "US Census",
+      "https://example.com/census"
+    ]
+  },
+  "claims": [
+    {
+      "verdict": "s",
+      "claim": "Das Werk wurde 1998 eröffnet.",
+      "why": "Das Register nennt die Eröffnung 1998.",
+      "refs": [
+        "reg"
+      ],
+      "quote": "1998 eröffnet"
+    },
+    {
+      "verdict": "r",
+      "claim": "Das Werk beschäftigt 1.200 Menschen.",
+      "why": "Aktuelle Meldungen nennen etwa 900 Beschäftigte, nicht 1.200.",
+      "refs": [
+        "reg",
+        "daily"
+      ],
+      "quote": "beschäftigt 1.200 Menschen"
+    },
+    {
+      "verdict": "s",
+      "claim": "Riverton hat etwa 40.000 Einwohner.",
+      "why": "Die Zensusdaten nennen 40.213.",
+      "refs": [
+        "census"
+      ],
+      "quote": "einer Stadt mit 40.000 Einwohnern"
+    },
+    {
+      "verdict": "c",
+      "claim": "Dana Reyes sagte, das Unternehmen habe das Produkt nie an Tieren getestet.",
+      "why": "Das Zitat steht nur in diesem Text; ein unabhängiger Beleg wurde nicht gefunden.",
+      "refs": [],
+      "quote": "„Wir haben dieses Produkt nie an Tieren getestet“, sagte Orion-Labs-Sprecherin Dana Reyes."
+    },
+    {
+      "verdict": "s",
+      "claim": "Dana Reyes ist Sprecherin von Orion Labs.",
+      "why": "Bestätigt durch die Presseseite des Unternehmens und frühere Berichte.",
+      "refs": [
+        "daily"
+      ],
+      "quote": "Orion-Labs-Sprecherin Dana Reyes"
+    },
+    {
+      "verdict": "s",
+      "claim": "Orion Labs meldete im vergangenen Jahr einen Umsatz von 80 Millionen Dollar.",
+      "why": "Entspricht der Zahl im Geschäftsbericht.",
+      "refs": [
+        "daily"
+      ],
+      "quote": "Umsatz von 80 Millionen Dollar im vergangenen Jahr"
+    },
+    {
+      "verdict": "c",
+      "claim": "Die Erweiterung bringt bis 2027 300 neue Jobs.",
+      "why": "Eine Prognose der örtlichen Verwaltung; nichts Unabhängiges bestätigt sie bisher.",
+      "refs": [],
+      "quote": "bis 2027 300 neue Jobs"
+    }
+  ]
+}
